@@ -84,9 +84,39 @@ NET3.compile(
     optimizer="sgd",
     metrics=["accuracy"],
 )
-NET3.fit(
-    xtrain,
-    ytrain,
-    epochs=10,
-    validation_data=(xdev, ydev),
+# NET3.fit(
+#     xtrain,
+#     ytrain,
+#     epochs=10,
+#     validation_data=(xdev, ydev),
+# )
+
+
+### GRADIENT CLIPPING ### 93%
+optimizer = keras.optimizers.SGD(clipvalue=1.0)
+NET3.compile(
+    loss="sparse_categorical_crossentropy",
+    optimizer=optimizer,
+    metrics=["accuracy"],
 )
+# NET3.fit(
+#     xtrain,
+#     ytrain,
+#     epochs=10,
+#     validation_data=(xdev, ydev),
+# )
+
+
+### NORM CLIPPING ### 90%
+optimizer = keras.optimizers.SGD(clipnorm=1.0)
+NET3.compile(
+    loss="sparse_categorical_crossentropy",
+    optimizer=optimizer,
+    metrics=["accuracy"],
+)
+# NET3.fit(
+#     xtrain,
+#     ytrain,
+#     epochs=10,
+#     validation_data=(xdev, ydev),
+# )
