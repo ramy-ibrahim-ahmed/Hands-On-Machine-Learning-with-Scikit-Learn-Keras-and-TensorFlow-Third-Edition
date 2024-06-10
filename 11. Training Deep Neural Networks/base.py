@@ -1,4 +1,5 @@
 import keras
+from keras import layers, losses
 import numpy as np
 
 fashion_mnist = keras.datasets.fashion_mnist.load_data()
@@ -37,3 +38,32 @@ def split_dataset(X, y):
 (xtest_A, ytest_A), (xtest_B, ytest_B) = split_dataset(xtest, ytest)
 xtrain_B = xtrain_B[:200]
 ytrain_B = ytrain_B[:200]
+
+
+def architecture(seed=67):
+    keras.utils.set_random_seed(seed=seed)
+    return keras.Sequential(
+        [
+            keras.Input(shape=(28, 28)),
+            layers.Flatten(),
+            layers.Dense(100, activation="relu", kernel_initializer="he_normal"),
+            layers.Dense(100, activation="relu", kernel_initializer="he_normal"),
+            layers.Dense(100, activation="relu", kernel_initializer="he_normal"),
+            layers.Dense(10, activation="softmax"),
+        ]
+    )
+
+
+def build_net(optimizer):
+    NET = architecture()
+    NET.compile(
+        loss=losses.SparseCategoricalCrossentropy(),
+        optimizer=optimizer,
+        metrics=["accuracy"],
+    )
+    return NET.fit(
+        xtrain,
+        ytrain,
+        epochs=10,
+        validation_data=(xvalid, yvalid),
+    )
